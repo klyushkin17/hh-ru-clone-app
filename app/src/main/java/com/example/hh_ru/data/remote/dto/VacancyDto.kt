@@ -12,11 +12,11 @@ data class VacancyDto(
     @field:Json(name = "publishedDate") val publishedDate: String,
     @field:Json(name = "isFavorite") val isFavorites: Boolean,
     @field:Json(name = "salary") val salary: SalaryInfoDto,
-    @field:Json(name = "schedules") val schedules: List<String>,
+    //@field:Json(name = "schedules") val schedules: List<String>,
     @field:Json(name = "appliedNumber") val appliedNumber: Int,
-    @field:Json(name = "description") val description: String,
+    @field:Json(name = "description") val description: String?,
     @field:Json(name = "responsibilities") val responsibilities: String,
-    @field:Json(name = "question") val question: List<String>,
+    //@field:Json(name = "question") val question: List<String>,
 )
 
 data class AddressInfoDto(

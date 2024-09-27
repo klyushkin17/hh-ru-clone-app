@@ -25,10 +25,4 @@ object AppModule {
             .build()
             .create()
     }
-
-    @Provides
-    @Singleton
-    fun provideHhRuRepository(): HhRuRepository {
-        return HhRuRepositoryImpl(api = provideHhRuApi())
-    }
 }

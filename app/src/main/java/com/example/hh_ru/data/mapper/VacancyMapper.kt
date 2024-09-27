@@ -21,11 +21,11 @@ fun VacancyDto.toVacancy(): Vacancy {
         isFavorites = isFavorites,
         short = salary.short,
         full = salary.full,
-        schedules = schedules,
+        //schedules = schedules,
         appliedNumber = appliedNumber,
         description = description,
         responsibilities = responsibilities,
-        question = question,
+        //question = question,
     )
 }
 
@@ -45,11 +45,11 @@ fun List<VacancyDto>.toListOfVacancy(): List<Vacancy> {
             isFavorites = it.isFavorites,
             short = it.salary.short,
             full = it.salary.full,
-            schedules = it.schedules,
+            //schedules = it.schedules,
             appliedNumber = it.appliedNumber,
             description = it.description,
             responsibilities = it.responsibilities,
-            question = it.question,
+            //question = it.question,
         )
     }
 }
