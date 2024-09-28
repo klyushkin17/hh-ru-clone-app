@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">hh-ru</string>
+    <string name="search_bar_placeholder">Должность, ключевые слова</string>
 </resources>
