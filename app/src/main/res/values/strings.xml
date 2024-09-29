@@ -9,4 +9,6 @@
     <string name="posted">Опубликовано</string>
     <string name="vacancy_button_text">Откликнуться</string>
     <string name="more">Ещё</string>
+    <string name="sort_text">По соответствию</string>
+    <string name="map_button_text">Карта</string>
 </resources>

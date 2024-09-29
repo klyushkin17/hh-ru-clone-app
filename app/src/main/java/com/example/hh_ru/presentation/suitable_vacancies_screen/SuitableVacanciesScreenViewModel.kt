@@ -1,10 +1,9 @@
-package com.example.hh_ru.presentation.main_screen
+package com.example.hh_ru.presentation.suitable_vacancies_screen
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hh_ru.domain.repository.HhRuRepository
 import com.example.hh_ru.utils.Resource
 import com.example.hh_ru.utils.UiEvent
@@ -21,26 +20,26 @@ import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class MainScreenViewModel @Inject constructor(
-    private val hhRuRepository: HhRuRepository,
+class SuitableVacanciesScreenViewModel @Inject constructor(
+    private val hhRuRepository: HhRuRepository
 ): ViewModel() {
 
     init {
-        getVacanciesAndOffers()
+        getVacancies()
     }
 
-    private val _state = MutableStateFlow(MainScreenState())
+    private val _state = MutableStateFlow(SuitableVacanciesScreenState())
     val state = _state.asStateFlow()
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    fun onEvent(event: MainScreenEvent) {
+    fun onEvent(event: SuitableVacanciesScreenEvent) {
         when(event) {
-            is MainScreenEvent.OnVacancyClick -> {
+            is SuitableVacanciesScreenEvent.OnVacancyClick -> {
 
             }
-            is MainScreenEvent.OnSearchFieldValueChange -> {
+            is SuitableVacanciesScreenEvent.OnSearchFieldValueChange -> {
                 viewModelScope.launch {
                     _state.value = state.value.copy(
                         searchFiledValue = event.newSearchFieldValue
@@ -50,24 +49,7 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    private fun getVacanciesAndOffers() {
-        viewModelScope.launch {
-            hhRuRepository
-                .getOffers()
-                .collect{ result ->
-                    when(result) {
-                        is Resource.Success -> {
-                            result.data?.let { offers ->
-                                _state.value = state.value.copy(
-                                    offerList = offers
-                                )
-                            }
-                        }
-                        is Resource.Loading -> Unit
-                        is Resource.Error -> Unit
-                    }
-                }
-        }
+    private fun getVacancies() {
         viewModelScope.launch {
             hhRuRepository
                 .getVacancies()
@@ -80,8 +62,12 @@ class MainScreenViewModel @Inject constructor(
                                 )
                             }
                         }
-                        is Resource.Loading -> Unit
-                        is Resource.Error -> Unit
+                        is Resource.Error -> {
+
+                        }
+                        is Resource.Loading -> {
+
+                        }
                     }
                 }
         }
@@ -120,24 +106,6 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    fun getVacancyDeclinationByNumber(numberOfVacancies: String): String {
-        val vacancy_01_5_9 = "вакансий"
-        val vacancy_2_4 = "вакансии"
-        when(numberOfVacancies.last()) {
-            '0' -> return vacancy_01_5_9
-            '1' -> return vacancy_01_5_9
-            '2' -> return vacancy_2_4
-            '3' -> return vacancy_2_4
-            '4' -> return vacancy_2_4
-            '5' -> return vacancy_01_5_9
-            '6' -> return vacancy_01_5_9
-            '7' -> return vacancy_01_5_9
-            '8' -> return vacancy_01_5_9
-            '9' -> return vacancy_01_5_9
-            else -> return vacancy_01_5_9
-        }
-    }
-
     fun getWatchDeclinationByNumber(numberOfPeople: String): String {
         val watch_1 = "просматривает"
         val watch_0_2_9= "просматривают"
@@ -153,6 +121,24 @@ class MainScreenViewModel @Inject constructor(
             '8' -> return watch_0_2_9
             '9' -> return watch_0_2_9
             else -> return watch_0_2_9
+        }
+    }
+
+    fun getVacancyDeclinationByNumber(numberOfVacancies: String): String {
+        val vacancy_01_5_9 = "вакансий"
+        val vacancy_2_4 = "вакансии"
+        when(numberOfVacancies.last()) {
+            '0' -> return vacancy_01_5_9
+            '1' -> return vacancy_01_5_9
+            '2' -> return vacancy_2_4
+            '3' -> return vacancy_2_4
+            '4' -> return vacancy_2_4
+            '5' -> return vacancy_01_5_9
+            '6' -> return vacancy_01_5_9
+            '7' -> return vacancy_01_5_9
+            '8' -> return vacancy_01_5_9
+            '9' -> return vacancy_01_5_9
+            else -> return vacancy_01_5_9
         }
     }
 

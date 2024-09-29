@@ -19,6 +19,6 @@ interface HhRuApi {
     ): VacancyDto
 
     companion object {
-        const val BASE_URL = "https://hh-ru-clone-data-1.onrender.com/"
+        const val BASE_URL = "https://hh-ru-clone-data.onrender.com/"
     }
 }

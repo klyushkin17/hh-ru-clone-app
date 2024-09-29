@@ -1,7 +1,6 @@
-package com.example.hh_ru.presentation.reusable_composables
+package com.example.hh_ru.presentation.main_screen
 
 import android.os.Build
-import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hh_ru.R
 import com.example.hh_ru.domain.model.Vacancy
-import com.example.hh_ru.presentation.main_screen.MainScreenViewModel
 import com.example.hh_ru.ui.theme.grayIconColor
 import com.example.hh_ru.ui.theme.grayTextColor
 import com.example.hh_ru.ui.theme.greenTextColor

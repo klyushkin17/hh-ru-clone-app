@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.hh_ru.presentation.main_screen.MainScreenRoot
+import com.example.hh_ru.presentation.suitable_vacancies_screen.SuitableVacanciesScreenRoot
 import com.example.hh_ru.ui.theme.HhruTheme
 import com.example.hh_ru.ui.theme.backgroundColor
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 color = backgroundColor
             ) {
                 HhruTheme {
-                    MainScreenRoot()
+                    SuitableVacanciesScreenRoot()
                 }
             }
         }
