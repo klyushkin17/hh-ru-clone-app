@@ -4,4 +4,5 @@ import com.example.hh_ru.domain.model.Vacancy
 
 sealed class MainScreenEvent {
     data class OnVacancyClick(val vacancy: Vacancy): MainScreenEvent()
+    data class OnSearchFieldValueChange(val newSearchFieldValue: String): MainScreenEvent()
 }

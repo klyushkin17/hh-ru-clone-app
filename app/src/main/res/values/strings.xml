@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">hh-ru</string>
     <string name="search_bar_placeholder">Должность, ключевые слова</string>
+    <string name="level_up_id">level_up_resume</string>
+    <string name="near_vacancies_id">near_vacancies</string>
+    <string name="temporary_job_id">temporary_job</string>
+    <string name="vacancies_for_you_title">Вакансии для вас</string>
+    <string name="now_watching">Сейчас</string>
+    <string name="posted">Опубликовано</string>
+    <string name="vacancy_button_text">Откликнуться</string>
+    <string name="more">Ещё</string>
 </resources>

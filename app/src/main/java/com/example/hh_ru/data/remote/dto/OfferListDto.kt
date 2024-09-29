@@ -4,5 +4,5 @@ import com.squareup.moshi.Json
 
 
 data class OfferListDto(
-    @field:Json(name = "offerList") val offerList: List<OfferDto>,
+    @field:Json(name = "offers") val offerList: List<OfferDto>,
 )

@@ -2,7 +2,7 @@ package com.example.hh_ru.domain.model
 
 data class Vacancy(
     val vacancyId: String,
-    val lookingNumber: Int,
+    val lookingNumber: Int?,
     val vacancyTitle: String,
     val town: String,
     val street: String,
@@ -14,9 +14,9 @@ data class Vacancy(
     val isFavorites: Boolean,
     val short: String?,
     val full: String,
-    //val schedules: List<String>,
+    val schedules: List<String>,
     val appliedNumber: Int,
     val description: String?,
     val responsibilities: String,
-    //val question: List<String>,
+    val question: List<String>?,
 )

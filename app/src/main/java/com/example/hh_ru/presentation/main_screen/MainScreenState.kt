@@ -6,5 +6,6 @@ import com.example.hh_ru.domain.model.VacancyList
 
 data class MainScreenState(
     val vacancyList: VacancyList = VacancyList(vacancyList = emptyList()),
-    val offerList: OfferList = OfferList(offerList = emptyList())
+    val offerList: OfferList = OfferList(offerList = emptyList()),
+    val searchFiledValue: String = "",
 )
