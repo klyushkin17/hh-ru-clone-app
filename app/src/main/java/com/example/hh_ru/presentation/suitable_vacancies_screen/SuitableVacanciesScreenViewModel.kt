@@ -8,6 +8,7 @@ import com.example.hh_ru.domain.repository.HhRuRepository
 import com.example.hh_ru.utils.Resource
 import com.example.hh_ru.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,6 +19,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 @HiltViewModel
 class SuitableVacanciesScreenViewModel @Inject constructor(
@@ -46,11 +48,14 @@ class SuitableVacanciesScreenViewModel @Inject constructor(
                     )
                 }
             }
+            is SuitableVacanciesScreenEvent.OnBackArrowIconClick -> {
+                sendUiEvent(UiEvent.PopBackStack)
+            }
         }
     }
 
     private fun getVacancies() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             hhRuRepository
                 .getVacancies()
                 .collect{ result ->

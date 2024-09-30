@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">hh-ru</string>
     <string name="search_bar_placeholder">Должность, ключевые слова</string>
+    <string name="suitable_screen_search_bar_placeholder">Должность по подходящим вакансиям</string>
     <string name="level_up_id">level_up_resume</string>
     <string name="near_vacancies_id">near_vacancies</string>
     <string name="temporary_job_id">temporary_job</string>

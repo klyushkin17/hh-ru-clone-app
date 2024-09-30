@@ -25,4 +25,5 @@ val statusBarColor = Color.Black
 val moreButtonColor = Color(0xFF2B7EFE)
 val sortTextColor = Color(0xFF2B7EFE)
 val sortIconColor = Color(0xFF2B7EFE)
+val filledLikeIconColor = Color(0xFF2B7EFE)
 val scaffoldBackgroundColor = Color (0xFF313234)

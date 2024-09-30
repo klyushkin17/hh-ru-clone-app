@@ -5,10 +5,15 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.hh_ru.data.mapper.toFavoriteVacancyEntity
+import com.example.hh_ru.data.mapper.toListOfFavoriteVacancy
 import com.example.hh_ru.domain.repository.HhRuRepository
 import com.example.hh_ru.utils.Resource
+import com.example.hh_ru.utils.Routes
 import com.example.hh_ru.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,6 +32,7 @@ class MainScreenViewModel @Inject constructor(
 
     init {
         getVacanciesAndOffers()
+        getFavoriteVacancies()
     }
 
     private val _state = MutableStateFlow(MainScreenState())
@@ -47,6 +53,35 @@ class MainScreenViewModel @Inject constructor(
                     )
                 }
             }
+            is MainScreenEvent.OnMoreButtonClick -> {
+                sendUiEvent(UiEvent.Navigate(Routes.SUITABLE_VACANCIES_SCREEN))
+            }
+            is MainScreenEvent.OnLikeIconClick -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    when(event.isFavorite){
+                        true -> {
+                            hhRuRepository.insertVacancyToFavorite(vacancy = event.vacancy.toFavoriteVacancyEntity())
+                            getFavoriteVacancies()
+                        }
+                        false -> {
+                            hhRuRepository.deleteVacancyFromFavorites(vacancyId = event.vacancy.vacancyId)
+                            getFavoriteVacancies()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getFavoriteVacancies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            hhRuRepository
+                .getFavoriteVacancies()
+                .collect{ result ->
+                    _state.value = state.value.copy(
+                        favoriteVacancyIds = result.toListOfFavoriteVacancy().map { it.vacancyId }.toList()
+                    )
+                }
         }
     }
 

@@ -1,5 +1,7 @@
 package com.example.hh_ru.data.repository
 
+import com.example.hh_ru.data.local.dao.FavoriteVacanciesDatabase
+import com.example.hh_ru.data.local.entities.FavoriteVacancyEntity
 import com.example.hh_ru.data.mapper.toOfferList
 import com.example.hh_ru.data.mapper.toVacancy
 import com.example.hh_ru.data.mapper.toVacancyList
@@ -18,31 +20,18 @@ import javax.inject.Singleton
 
 @Singleton
 class HhRuRepositoryImpl @Inject constructor(
-    private val api: HhRuApi
+    private val api: HhRuApi,
+    private val db: FavoriteVacanciesDatabase,
 ): HhRuRepository {
+
+    private val dao = db.favoriteVacanciesDao
+
     override suspend fun getVacancies(): Flow<Resource<VacancyList>> {
         return flow {
             emit(Resource.Loading(true))
             try {
                 val result = api.getVacancies()
                 emit(Resource.Success(data = result.toVacancyList()))
-            } catch (e: IOException) {
-                e.printStackTrace()
-                emit(Resource.Error(message = "IOException: Couldn't load the data"))
-            } catch (e: HttpException) {
-                e.printStackTrace()
-                emit(Resource.Error(message = "HttpException: Couldn't load the data"))
-            }
-            emit(Resource.Loading(false))
-        }
-    }
-
-    override suspend fun getVacancyInfo(vacancyId: String): Flow<Resource<Vacancy>> {
-        return flow {
-            emit(Resource.Loading(true))
-            try {
-                val result = api.getVacancyById(vacancyId)
-                emit(Resource.Success(data = result.toVacancy()))
             } catch (e: IOException) {
                 e.printStackTrace()
                 emit(Resource.Error(message = "IOException: Couldn't load the data"))
@@ -68,6 +57,20 @@ class HhRuRepositoryImpl @Inject constructor(
                 emit(Resource.Error(message = "HttpException: Couldn't load the data"))
             }
             emit(Resource.Loading(false))
+        }
+    }
+
+    override suspend fun insertVacancyToFavorite(vacancy: FavoriteVacancyEntity) {
+        dao.insertVacancyToFavorites(vacancy)
+    }
+
+    override suspend fun deleteVacancyFromFavorites(vacancyId: String) {
+        dao.deleteVacancyFromFavorites(vacancyId)
+    }
+
+    override suspend fun getFavoriteVacancies(): Flow<List<FavoriteVacancyEntity>> {
+        return flow {
+            emit(dao.getFavoriteVacancies())
         }
     }
 }

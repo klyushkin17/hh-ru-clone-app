@@ -25,6 +25,7 @@ import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -34,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.unpackInt1
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hh_ru.R
 import com.example.hh_ru.ui.theme.findIconColor
@@ -43,12 +45,23 @@ import com.example.hh_ru.ui.theme.sanFrancisco
 import com.example.hh_ru.ui.theme.topBarColor
 import com.example.hh_ru.ui.theme.whiteIconColor
 import com.example.hh_ru.ui.theme.whiteTextColor
+import com.example.hh_ru.utils.UiEvent
 
 @Composable
 fun MainScreenRoot(
+    onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: MainScreenViewModel = hiltViewModel()
 ){
     val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect{ event ->
+            when(event) {
+                is UiEvent.Navigate -> onNavigate(event)
+                else -> Unit
+            }
+        }
+    }
 
     MainScreen(
         viewModel = viewModel,
@@ -81,14 +94,19 @@ fun MainScreen(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        OffersScrollableList(state = state)
-        Spacer(modifier = Modifier.height(32.dp))
+        if (state.offerList.offerList.isNotEmpty()) {
+            OffersScrollableList(state = state)
+            Spacer(modifier = Modifier.height(32.dp))
+        }
         VacanciesList(
             viewModel = viewModel,
             state = state
         )
         Spacer(modifier = Modifier.height(24.dp))
-
+        MoreButton(
+            viewModel = viewModel,
+            state = state,
+        )
     }
 }
 
@@ -141,7 +159,11 @@ fun VacanciesList(
         Spacer(modifier = Modifier.height(16.dp))
         if (state.vacancyList.vacancyList.isNotEmpty()) {
             for (vacancyIndex in 0..2) {
-                VacanciesListElement(viewModel = viewModel, vacancy = state.vacancyList.vacancyList[vacancyIndex])
+                VacanciesListElement(
+                    viewModel = viewModel,
+                    vacancy = state.vacancyList.vacancyList[vacancyIndex],
+                    state = state
+                )
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
@@ -167,7 +189,7 @@ fun MoreButton(
                 containerColor = moreButtonColor
             ),
             onClick = {
-
+                viewModel.onEvent(MainScreenEvent.OnMoreButtonClick)
             }
         ) {
             Row(

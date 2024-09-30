@@ -1,7 +1,9 @@
 package com.example.hh_ru.data.mapper
 
+import com.example.hh_ru.data.local.entities.FavoriteVacancyEntity
 import com.example.hh_ru.data.remote.dto.VacancyDto
 import com.example.hh_ru.data.remote.dto.VacancyListDto
+import com.example.hh_ru.domain.model.FavoriteVacancy
 import com.example.hh_ru.domain.model.Vacancy
 import com.example.hh_ru.domain.model.VacancyList
 import kotlin.math.exp
@@ -59,3 +61,51 @@ fun VacancyListDto.toVacancyList(): VacancyList {
         vacancyList = vacancyList.toListOfVacancy()
     )
 }
+
+fun FavoriteVacancyEntity.toFavoriteVacancy(): FavoriteVacancy {
+    return FavoriteVacancy(
+        vacancyId = vacancyId,
+        lookingNumber = lookingNumber,
+        vacancyTitle = vacancyTitle,
+        town = town,
+        company = company,
+        previewText = previewText
+    )
+}
+
+fun List<FavoriteVacancyEntity>.toListOfFavoriteVacancy(): List<FavoriteVacancy> {
+    return this.map {
+        FavoriteVacancy (
+            vacancyId = it.vacancyId,
+            lookingNumber = it.lookingNumber,
+            vacancyTitle = it.vacancyTitle,
+            town = it.town,
+            company = it.company,
+            previewText = it.previewText
+        )
+    }
+}
+
+fun FavoriteVacancy.toFavoriteVacancyEntity(): FavoriteVacancyEntity {
+    return FavoriteVacancyEntity(
+        vacancyId = vacancyId,
+        lookingNumber = lookingNumber,
+        vacancyTitle = vacancyTitle,
+        town = town,
+        company = company,
+        previewText = previewText
+    )
+}
+
+fun Vacancy.toFavoriteVacancyEntity(): FavoriteVacancyEntity {
+    return FavoriteVacancyEntity(
+        vacancyId = vacancyId,
+        lookingNumber = lookingNumber,
+        vacancyTitle = vacancyTitle,
+        town = town,
+        company = company,
+        previewText = previewText
+    )
+}
+
+

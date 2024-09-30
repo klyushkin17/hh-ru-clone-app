@@ -2,6 +2,7 @@ package com.example.hh_ru.presentation.main_screen
 
 import android.os.Build
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hh_ru.R
 import com.example.hh_ru.domain.model.Vacancy
+import com.example.hh_ru.ui.theme.filledLikeIconColor
 import com.example.hh_ru.ui.theme.grayIconColor
 import com.example.hh_ru.ui.theme.grayTextColor
 import com.example.hh_ru.ui.theme.greenTextColor
@@ -37,7 +39,8 @@ import com.example.hh_ru.ui.theme.whiteTextColor
 @Composable
 fun VacanciesListElement(
     viewModel: MainScreenViewModel,
-    vacancy: Vacancy
+    vacancy: Vacancy,
+    state: MainScreenState
 ) {
     Column(
         modifier = Modifier
@@ -51,7 +54,10 @@ fun VacanciesListElement(
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column() {
+            Column(
+                modifier = Modifier
+                    .weight(0.9f)
+            ) {
                 vacancy.lookingNumber?.let {
                     Text(
                         text = stringResource(id = R.string.now_watching) + " " +
@@ -120,7 +126,7 @@ fun VacanciesListElement(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = vacancy.company,
+                        text = vacancy.previewText,
                         color = whiteTextColor,
                         fontFamily = sanFrancisco,
                         fontSize = 14.sp,
@@ -140,6 +146,31 @@ fun VacanciesListElement(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal,
                     lineHeight = 16.8.sp
+                )
+            }
+            if (
+                state.favoriteVacancyIds.contains(vacancy.vacancyId)
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .height(24.dp)
+                        .clickable {
+                            viewModel.onEvent(MainScreenEvent.OnLikeIconClick(vacancy, isFavorite = false))
+                        },
+                    painter = painterResource(id = R.drawable.filled_like_icon),
+                    contentDescription = "filled_like_icon",
+                    tint = filledLikeIconColor,
+                )
+            } else {
+                Icon(
+                    modifier = Modifier
+                        .height(24.dp)
+                        .clickable {
+                            viewModel.onEvent(MainScreenEvent.OnLikeIconClick(vacancy, isFavorite = true))
+                        },
+                    painter = painterResource(id = R.drawable.empty_liked_icon),
+                    contentDescription = "empty_like_icon",
+                    tint = grayIconColor,
                 )
             }
         }

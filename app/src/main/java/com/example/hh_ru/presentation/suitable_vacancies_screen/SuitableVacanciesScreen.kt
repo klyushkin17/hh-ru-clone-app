@@ -3,6 +3,7 @@ package com.example.hh_ru.presentation.suitable_vacancies_screen
 import android.annotation.SuppressLint
 import android.widget.Space
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -51,13 +53,26 @@ import com.example.hh_ru.ui.theme.sortTextColor
 import com.example.hh_ru.ui.theme.topBarColor
 import com.example.hh_ru.ui.theme.whiteIconColor
 import com.example.hh_ru.ui.theme.whiteTextColor
+import com.example.hh_ru.utils.UiEvent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SuitableVacanciesScreenRoot(
-    viewModel: SuitableVacanciesScreenViewModel = hiltViewModel()
+    viewModel: SuitableVacanciesScreenViewModel = hiltViewModel(),
+    onNavigate: (UiEvent.Navigate) -> Unit,
+    onPopBackStack: () -> Unit,
 ){
     val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when(event) {
+                is UiEvent.Navigate -> onNavigate(event)
+                is UiEvent.PopBackStack -> onPopBackStack()
+            }
+        }
+    }
+
     Scaffold(
         containerColor = backgroundColor,
         floatingActionButton = {
@@ -183,7 +198,7 @@ fun TopBar(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(id = R.string.search_bar_placeholder),
+                            text = stringResource(id = R.string.suitable_screen_search_bar_placeholder),
                             fontFamily = sanFrancisco,
                             fontWeight = FontWeight.Normal,
                             fontSize = 14.sp,
@@ -193,6 +208,10 @@ fun TopBar(
                 },
                 leadingIcon = {
                     Icon(
+                        modifier = Modifier
+                            .clickable {
+                                onEvent(SuitableVacanciesScreenEvent.OnBackArrowIconClick)
+                            },
                         painter = painterResource(id = R.drawable.back_arrow_icon),
                         contentDescription = "find_icon",
                         tint = whiteIconColor

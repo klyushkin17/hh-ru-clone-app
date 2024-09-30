@@ -6,4 +6,5 @@ import com.example.hh_ru.presentation.main_screen.MainScreenEvent
 sealed class SuitableVacanciesScreenEvent {
     data class OnVacancyClick(val vacancy: Vacancy): SuitableVacanciesScreenEvent()
     data class OnSearchFieldValueChange(val newSearchFieldValue: String): SuitableVacanciesScreenEvent()
+    object OnBackArrowIconClick: SuitableVacanciesScreenEvent()
 }
