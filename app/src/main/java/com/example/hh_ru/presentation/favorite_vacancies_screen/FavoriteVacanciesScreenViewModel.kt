@@ -1,22 +1,20 @@
-package com.example.hh_ru.presentation.main_screen
+package com.example.hh_ru.presentation.favorite_vacancies_screen
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.hh_ru.data.mapper.toFavoriteVacancyEntity
 import com.example.hh_ru.data.mapper.toListOfFavoriteVacancy
 import com.example.hh_ru.domain.repository.HhRuRepository
-import com.example.hh_ru.utils.Resource
-import com.example.hh_ru.utils.Routes
 import com.example.hh_ru.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.delayEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -26,51 +24,35 @@ import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class MainScreenViewModel @Inject constructor(
-    private val hhRuRepository: HhRuRepository,
+class FavoriteVacanciesScreenViewModel @Inject constructor(
+    private val hhRuRepository: HhRuRepository
 ): ViewModel() {
 
-    private val _state = MutableStateFlow(MainScreenState())
+    private val _state = MutableStateFlow(FavoriteVacanciesScreenState())
     val state = _state.asStateFlow()
 
     init {
-        getVacanciesAndOffers()
+        getFavoriteVacancies()
     }
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    fun onEvent(event: MainScreenEvent) {
+    fun onEvent(event: FavoriteVacanciesScreenEvent) {
         when(event) {
-            is MainScreenEvent.OnVacancyClick -> {
-
-            }
-            is MainScreenEvent.OnSearchFieldValueChange -> {
-                viewModelScope.launch {
-                    _state.value = state.value.copy(
-                        searchFiledValue = event.newSearchFieldValue
-                    )
+            is FavoriteVacanciesScreenEvent.OnLikeIconClick -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    hhRuRepository
+                        .deleteVacancyFromFavorites(vacancyId = event.vacancy.vacancyId)
+                    getFavoriteVacancies()
                 }
             }
-            is MainScreenEvent.OnMoreButtonClick -> {
-                sendUiEvent(UiEvent.Navigate(Routes.SUITABLE_VACANCIES_SCREEN))
-            }
-            is MainScreenEvent.OnLikeIconClick -> {
+            is FavoriteVacanciesScreenEvent.OnCloseComposition -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    when(event.isFavorite){
-                        true -> {
-                            hhRuRepository.insertVacancyToFavorite(vacancy = event.vacancy.toFavoriteVacancyEntity())
-                            getFavoriteVacancies()
-                        }
-                        false -> {
-                            hhRuRepository.deleteVacancyFromFavorites(vacancyId = event.vacancy.vacancyId)
-                            getFavoriteVacancies()
-                        }
+                    state.value.favoriteVacanciesIdsMap.forEach { record ->
+                        if (!record.value) hhRuRepository.deleteVacancyFromFavorites(vacancyId = record.key)
                     }
                 }
-            }
-            is MainScreenEvent.OnTriggerGettingFavoritesFromLaunchEffect -> {
-                getFavoriteVacancies()
             }
         }
     }
@@ -79,47 +61,14 @@ class MainScreenViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             hhRuRepository
                 .getFavoriteVacancies()
-                .collect{ result ->
+                .collect { result ->
                     _state.value = state.value.copy(
-                        favoriteVacancyIds = result.toListOfFavoriteVacancy().map { it.vacancyId }.toList()
+                        favoriteVacanciesList = result.toListOfFavoriteVacancy(),
+                        favoriteVacanciesIdsMap = result.associateBy(
+                            {it.vacancyId},
+                            {true}
+                        )
                     )
-                }
-        }
-    }
-
-    private fun getVacanciesAndOffers() {
-        viewModelScope.launch {
-            hhRuRepository
-                .getOffers()
-                .collect{ result ->
-                    when(result) {
-                        is Resource.Success -> {
-                            result.data?.let { offers ->
-                                _state.value = state.value.copy(
-                                    offerList = offers
-                                )
-                            }
-                        }
-                        is Resource.Loading -> Unit
-                        is Resource.Error -> Unit
-                    }
-                }
-        }
-        viewModelScope.launch {
-            hhRuRepository
-                .getVacancies()
-                .collect{ result ->
-                    when(result) {
-                        is Resource.Success -> {
-                            result.data?.let { vacancies ->
-                                _state.value = state.value.copy(
-                                    vacancyList = vacancies
-                                )
-                            }
-                        }
-                        is Resource.Loading -> Unit
-                        is Resource.Error -> Unit
-                    }
                 }
         }
     }
@@ -193,7 +142,7 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    private fun sendUiEvent(event: UiEvent) {
+    suspend fun sendUiEvent(event: UiEvent) {
         viewModelScope.launch {
             _uiEvent.send(event)
         }

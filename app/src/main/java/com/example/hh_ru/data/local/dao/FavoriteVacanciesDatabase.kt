@@ -8,7 +8,7 @@ import com.example.hh_ru.data.local.entities.FavoriteVacancyEntity
     entities = [
         FavoriteVacancyEntity::class,
     ],
-    version = 3
+    version = 4
 )
 abstract class FavoriteVacanciesDatabase: RoomDatabase() {
 

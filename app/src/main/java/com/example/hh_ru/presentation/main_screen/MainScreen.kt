@@ -62,6 +62,9 @@ fun MainScreenRoot(
             }
         }
     }
+    LaunchedEffect(key1 = Unit) {
+        viewModel.onEvent(MainScreenEvent.OnTriggerGettingFavoritesFromLaunchEffect)
+    }
 
     MainScreen(
         viewModel = viewModel,

@@ -184,7 +184,6 @@ fun VacanciesListElement(
                 containerColor = vacancyButtonColor
             ),
             onClick = {
-
             }
         ) {
             Row(

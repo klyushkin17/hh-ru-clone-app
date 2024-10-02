@@ -1,9 +1,10 @@
-package com.example.hh_ru.presentation.suitable_vacancies_screen
+package com.example.hh_ru.presentation.favorite_vacancies_screen
 
 import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,15 +21,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hh_ru.R
+import com.example.hh_ru.domain.model.FavoriteVacancy
 import com.example.hh_ru.domain.model.Vacancy
-import com.example.hh_ru.presentation.main_screen.MainScreenEvent
-import com.example.hh_ru.presentation.main_screen.MainScreenViewModel
+import com.example.hh_ru.presentation.suitable_vacancies_screen.SuitableVacanciesScreenEvent
+import com.example.hh_ru.presentation.suitable_vacancies_screen.SuitableVacanciesScreenState
+import com.example.hh_ru.presentation.suitable_vacancies_screen.SuitableVacanciesScreenViewModel
 import com.example.hh_ru.ui.theme.filledLikeIconColor
 import com.example.hh_ru.ui.theme.grayIconColor
 import com.example.hh_ru.ui.theme.grayTextColor
@@ -39,10 +43,10 @@ import com.example.hh_ru.ui.theme.vacancyButtonColor
 import com.example.hh_ru.ui.theme.whiteTextColor
 
 @Composable
-fun VacanciesListElement(
-    viewModel: SuitableVacanciesScreenViewModel,
-    vacancy: Vacancy,
-    state: SuitableVacanciesScreenState
+fun FavoriteVacanciesListElement(
+    viewModel: FavoriteVacanciesScreenViewModel,
+    vacancy: FavoriteVacancy,
+    state: FavoriteVacanciesScreenState
 ) {
     Column(
         modifier = Modifier
@@ -139,9 +143,13 @@ fun VacanciesListElement(
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        stringResource(id = R.string.posted) + " " + viewModel.formatDateString(vacancy.publishedDate)
+                        stringResource(id = R.string.posted) + " " + viewModel.formatDateString(
+                            vacancy.publishedDate
+                        )
                     } else {
-                        stringResource(id = R.string.posted) + " " + viewModel.formatDateStringLowVersion(vacancy.publishedDate)
+                        stringResource(id = R.string.posted) + " " + viewModel.formatDateStringLowVersion(
+                            vacancy.publishedDate
+                        )
                     },
                     color = grayTextColor,
                     fontFamily = sanFrancisco,
@@ -150,31 +158,16 @@ fun VacanciesListElement(
                     lineHeight = 16.8.sp
                 )
             }
-            if (
-                state.favoriteVacancyIds.contains(vacancy.vacancyId)
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .height(24.dp)
-                        .clickable {
-                            viewModel.onEvent(SuitableVacanciesScreenEvent.OnLikeIconClick(vacancy, isFavorite = false))
-                        },
-                    painter = painterResource(id = R.drawable.filled_like_icon),
-                    contentDescription = "filled_like_icon",
-                    tint = filledLikeIconColor,
-                )
-            } else {
-                Icon(
-                    modifier = Modifier
-                        .height(24.dp)
-                        .clickable {
-                            viewModel.onEvent(SuitableVacanciesScreenEvent.OnLikeIconClick(vacancy, isFavorite = true))
-                        },
-                    painter = painterResource(id = R.drawable.empty_liked_icon),
-                    contentDescription = "empty_like_icon",
-                    tint = grayIconColor,
-                )
-            }
+            Icon(
+                modifier = Modifier
+                    .height(24.dp)
+                    .clickable {
+                        viewModel.onEvent(FavoriteVacanciesScreenEvent.OnLikeIconClick(vacancy))
+                    },
+                painter = painterResource(id = R.drawable.filled_like_icon),
+                contentDescription = "filled_like_icon",
+                tint = filledLikeIconColor,
+            )
         }
         Spacer(modifier = Modifier.height(21.dp))
         Button(
@@ -186,7 +179,7 @@ fun VacanciesListElement(
                 containerColor = vacancyButtonColor
             ),
             onClick = {
-                viewModel.onEvent(SuitableVacanciesScreenEvent.GoToFavoritesTEMP)
+
             }
         ) {
             Row(

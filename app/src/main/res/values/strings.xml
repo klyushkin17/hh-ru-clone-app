@@ -12,4 +12,5 @@
     <string name="more">Ещё</string>
     <string name="sort_text">По соответствию</string>
     <string name="map_button_text">Карта</string>
+    <string name="favorites_title">Избранное</string>
 </resources>

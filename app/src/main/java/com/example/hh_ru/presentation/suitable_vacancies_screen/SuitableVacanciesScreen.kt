@@ -1,6 +1,7 @@
 package com.example.hh_ru.presentation.suitable_vacancies_screen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -54,21 +55,31 @@ import com.example.hh_ru.ui.theme.topBarColor
 import com.example.hh_ru.ui.theme.whiteIconColor
 import com.example.hh_ru.ui.theme.whiteTextColor
 import com.example.hh_ru.utils.UiEvent
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SuitableVacanciesScreenRoot(
     viewModel: SuitableVacanciesScreenViewModel = hiltViewModel(),
     onNavigate: (UiEvent.Navigate) -> Unit,
-    onPopBackStack: () -> Unit,
+    onNavigateUp: () -> Unit,
 ){
     val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.onEvent(SuitableVacanciesScreenEvent.OnTriggerGettingFavoritesFromLaunchEffect)
+    }
+
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when(event) {
                 is UiEvent.Navigate -> onNavigate(event)
-                is UiEvent.PopBackStack -> onPopBackStack()
+                is UiEvent.NavigateUp -> onNavigateUp()
             }
         }
     }
@@ -100,7 +111,7 @@ fun SuitableVacanciesScreenRoot(
                     Text(
                         text = stringResource(id = R.string.map_button_text),
                         fontFamily = sanFrancisco,
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight = FontWeight.Medium,
                         fontSize = 16.sp,
                         color = whiteTextColor,
                         lineHeight = 19.2.sp,
@@ -156,7 +167,8 @@ fun VacanciesList(
         items(state.vacancyList.vacancyList) { vacancy ->
             VacanciesListElement(
                 viewModel = viewModel,
-                vacancy = vacancy
+                vacancy = vacancy,
+                state = state
             )
             Spacer(modifier = Modifier.height(8.dp))
         }

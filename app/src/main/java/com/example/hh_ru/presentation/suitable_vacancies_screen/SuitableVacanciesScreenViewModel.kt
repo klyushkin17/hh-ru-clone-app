@@ -4,8 +4,12 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hh_ru.data.mapper.toFavoriteVacancyEntity
+import com.example.hh_ru.data.mapper.toListOfFavoriteVacancy
 import com.example.hh_ru.domain.repository.HhRuRepository
+import com.example.hh_ru.presentation.main_screen.MainScreenEvent
 import com.example.hh_ru.utils.Resource
+import com.example.hh_ru.utils.Routes
 import com.example.hh_ru.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,12 +30,12 @@ class SuitableVacanciesScreenViewModel @Inject constructor(
     private val hhRuRepository: HhRuRepository
 ): ViewModel() {
 
+    private val _state = MutableStateFlow(SuitableVacanciesScreenState())
+    val state = _state.asStateFlow()
+
     init {
         getVacancies()
     }
-
-    private val _state = MutableStateFlow(SuitableVacanciesScreenState())
-    val state = _state.asStateFlow()
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
@@ -49,8 +53,41 @@ class SuitableVacanciesScreenViewModel @Inject constructor(
                 }
             }
             is SuitableVacanciesScreenEvent.OnBackArrowIconClick -> {
-                sendUiEvent(UiEvent.PopBackStack)
+                sendUiEvent(UiEvent.Navigate(Routes.MAIN_SCREEN))
             }
+
+            is SuitableVacanciesScreenEvent.OnLikeIconClick -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    when(event.isFavorite){
+                        true -> {
+                            hhRuRepository.insertVacancyToFavorite(vacancy = event.vacancy.toFavoriteVacancyEntity())
+                            getFavoriteVacancies()
+                        }
+                        false -> {
+                            hhRuRepository.deleteVacancyFromFavorites(vacancyId = event.vacancy.vacancyId)
+                            getFavoriteVacancies()
+                        }
+                    }
+                }
+            }
+            is SuitableVacanciesScreenEvent.OnTriggerGettingFavoritesFromLaunchEffect -> {
+                getFavoriteVacancies()
+            }
+            is SuitableVacanciesScreenEvent.GoToFavoritesTEMP -> {
+                sendUiEvent(UiEvent.Navigate(Routes.FAVORITE_VACANCIES_SCREEN))
+            }
+        }
+    }
+
+    private fun getFavoriteVacancies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            hhRuRepository
+                .getFavoriteVacancies()
+                .collect{ result ->
+                    _state.value = state.value.copy(
+                        favoriteVacancyIds = result.toListOfFavoriteVacancy().map { it.vacancyId }.toList()
+                    )
+                }
         }
     }
 

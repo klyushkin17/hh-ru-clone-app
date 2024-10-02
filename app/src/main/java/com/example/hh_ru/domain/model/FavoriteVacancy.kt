@@ -9,4 +9,5 @@ data class FavoriteVacancy(
     val town: String,
     val company: String,
     val previewText: String,
+    val publishedDate: String,
 )

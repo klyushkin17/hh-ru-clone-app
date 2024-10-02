@@ -69,7 +69,8 @@ fun FavoriteVacancyEntity.toFavoriteVacancy(): FavoriteVacancy {
         vacancyTitle = vacancyTitle,
         town = town,
         company = company,
-        previewText = previewText
+        previewText = previewText,
+        publishedDate = publishedDate
     )
 }
 
@@ -81,7 +82,8 @@ fun List<FavoriteVacancyEntity>.toListOfFavoriteVacancy(): List<FavoriteVacancy>
             vacancyTitle = it.vacancyTitle,
             town = it.town,
             company = it.company,
-            previewText = it.previewText
+            previewText = it.previewText,
+            publishedDate = it.publishedDate
         )
     }
 }
@@ -93,7 +95,8 @@ fun FavoriteVacancy.toFavoriteVacancyEntity(): FavoriteVacancyEntity {
         vacancyTitle = vacancyTitle,
         town = town,
         company = company,
-        previewText = previewText
+        previewText = previewText,
+        publishedDate = publishedDate
     )
 }
 
@@ -104,7 +107,8 @@ fun Vacancy.toFavoriteVacancyEntity(): FavoriteVacancyEntity {
         vacancyTitle = vacancyTitle,
         town = town,
         company = company,
-        previewText = previewText
+        previewText = previewText,
+        publishedDate = publishedDate
     )
 }
 

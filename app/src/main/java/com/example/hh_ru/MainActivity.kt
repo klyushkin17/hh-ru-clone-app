@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.hh_ru.presentation.favorite_vacancies_screen.FavoriteVacanciesScreenRoot
 import com.example.hh_ru.presentation.main_screen.MainScreenRoot
 import com.example.hh_ru.presentation.suitable_vacancies_screen.SuitableVacanciesScreenRoot
 import com.example.hh_ru.ui.theme.HhruTheme
@@ -57,8 +58,18 @@ class MainActivity : ComponentActivity() {
                                     onNavigate = {
                                         navController.navigate(it.route)
                                     },
-                                    onPopBackStack = {
-                                        navController.popBackStack()
+                                    onNavigateUp = {
+                                        navController.navigateUp()
+                                    }
+                                )
+                            }
+                            composable(route = Routes.FAVORITE_VACANCIES_SCREEN) {
+                                FavoriteVacanciesScreenRoot(
+                                    onNavigate = {
+                                        navController.navigate(it.route)
+                                    },
+                                    onNavigateUp = {
+                                        navController.navigateUp()
                                     }
                                 )
                             }
