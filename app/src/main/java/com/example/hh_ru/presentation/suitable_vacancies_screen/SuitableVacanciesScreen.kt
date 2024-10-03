@@ -55,6 +55,7 @@ import com.example.hh_ru.ui.theme.topBarColor
 import com.example.hh_ru.ui.theme.whiteIconColor
 import com.example.hh_ru.ui.theme.whiteTextColor
 import com.example.hh_ru.utils.UiEvent
+import com.example.hh_ru.utils.converters.TextConverters
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -168,7 +169,11 @@ fun VacanciesList(
             VacanciesListElement(
                 viewModel = viewModel,
                 vacancy = vacancy,
-                state = state
+                state = state,
+                modifier = Modifier
+                    .clickable {
+                        viewModel.onEvent(SuitableVacanciesScreenEvent.OnVacancyClick)
+                    }
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -270,7 +275,7 @@ fun SortingSection(
     ) {
         Text(
             text = state.vacancyList.vacancyList.size.toString() + " " +
-                    viewModel.getVacancyDeclinationByNumber(state.vacancyList.vacancyList.size.toString()),
+                    TextConverters.getVacancyDeclinationByNumber(state.vacancyList.vacancyList.size.toString()),
             fontFamily = sanFrancisco,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,

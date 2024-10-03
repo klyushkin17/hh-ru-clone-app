@@ -7,4 +7,5 @@ object Routes {
     const val MESSAGE_SCREEN = "message_screen"
     const val ANSWERS_SCREEN = "answers_screen"
     const val PROFILE_SCREEN = "profile_screen"
+    const val VACANCY_SCREEN = "vacancy_screen"
 }

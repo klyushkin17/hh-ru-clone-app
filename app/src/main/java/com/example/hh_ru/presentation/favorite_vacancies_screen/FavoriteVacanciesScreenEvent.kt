@@ -7,4 +7,5 @@ import com.example.hh_ru.presentation.main_screen.MainScreenEvent
 sealed class FavoriteVacanciesScreenEvent {
     data class OnLikeIconClick(val vacancy: FavoriteVacancy): FavoriteVacanciesScreenEvent()
     object OnCloseComposition: FavoriteVacanciesScreenEvent()
+    object OnVacancyClick: FavoriteVacanciesScreenEvent()
 }

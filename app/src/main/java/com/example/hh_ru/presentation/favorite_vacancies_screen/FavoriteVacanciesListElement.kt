@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -41,15 +42,17 @@ import com.example.hh_ru.ui.theme.mainElementBackgroundColor
 import com.example.hh_ru.ui.theme.sanFrancisco
 import com.example.hh_ru.ui.theme.vacancyButtonColor
 import com.example.hh_ru.ui.theme.whiteTextColor
+import com.example.hh_ru.utils.converters.DataConverters
+import com.example.hh_ru.utils.converters.TextConverters
 
 @Composable
 fun FavoriteVacanciesListElement(
     viewModel: FavoriteVacanciesScreenViewModel,
     vacancy: FavoriteVacancy,
-    state: FavoriteVacanciesScreenState
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(color = mainElementBackgroundColor, shape = RoundedCornerShape(8.dp))
             .padding(16.dp)
@@ -67,9 +70,9 @@ fun FavoriteVacanciesListElement(
                 vacancy.lookingNumber?.let {
                     Text(
                         text = stringResource(id = R.string.now_watching) + " " +
-                                viewModel.getWatchDeclinationByNumber(vacancy.lookingNumber.toString()) + " " +
+                                TextConverters.getWatchDeclinationByNumber(vacancy.lookingNumber.toString()) + " " +
                                 vacancy.lookingNumber.toString() + " " +
-                                viewModel.getPeopleDeclinationByNumber(vacancy.lookingNumber.toString()),
+                                TextConverters.getPeopleDeclinationByNumber(vacancy.lookingNumber.toString()),
                         color = greenTextColor,
                         fontFamily = sanFrancisco,
                         fontSize = 14.sp,
@@ -143,11 +146,11 @@ fun FavoriteVacanciesListElement(
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        stringResource(id = R.string.posted) + " " + viewModel.formatDateString(
+                        stringResource(id = R.string.posted) + " " + DataConverters.formatDateString(
                             vacancy.publishedDate
                         )
                     } else {
-                        stringResource(id = R.string.posted) + " " + viewModel.formatDateStringLowVersion(
+                        stringResource(id = R.string.posted) + " " + DataConverters.formatDateStringLowVersion(
                             vacancy.publishedDate
                         )
                     },

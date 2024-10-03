@@ -27,6 +27,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.hh_ru.presentation.bottom_navigation_bar.BottomNavBar
 import com.example.hh_ru.presentation.bottom_navigation_bar.BottomNavBarItem
 import com.example.hh_ru.presentation.bottom_navigation_bar.BottomNavBarViewModel
+import com.example.hh_ru.presentation.dummy_screen.DummyScreen
+import com.example.hh_ru.presentation.dummy_screen.DummyScreenRoot
 import com.example.hh_ru.presentation.favorite_vacancies_screen.FavoriteVacanciesScreenRoot
 import com.example.hh_ru.presentation.main_screen.MainScreenRoot
 import com.example.hh_ru.presentation.suitable_vacancies_screen.SuitableVacanciesScreenRoot
@@ -90,6 +92,18 @@ class MainActivity : ComponentActivity() {
                                             navController.navigateUp()
                                         }
                                     )
+                                }
+                                composable(route = Routes.MESSAGE_SCREEN) {
+                                    DummyScreenRoot(navController = navController)
+                                }
+                                composable(route = Routes.PROFILE_SCREEN) {
+                                    DummyScreenRoot(navController = navController)
+                                }
+                                composable(route = Routes.ANSWERS_SCREEN) {
+                                    DummyScreenRoot(navController = navController)
+                                }
+                                composable(route = Routes.VACANCY_SCREEN) {
+                                    DummyScreenRoot(navController = navController)
                                 }
                             }
                         }

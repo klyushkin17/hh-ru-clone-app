@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -36,11 +37,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hh_ru.R
 import com.example.hh_ru.domain.model.FavoriteVacancy
+import com.example.hh_ru.presentation.suitable_vacancies_screen.SuitableVacanciesScreenEvent
 import com.example.hh_ru.presentation.suitable_vacancies_screen.VacanciesList
 import com.example.hh_ru.ui.theme.grayTextColor
 import com.example.hh_ru.ui.theme.sanFrancisco
 import com.example.hh_ru.ui.theme.whiteTextColor
 import com.example.hh_ru.utils.UiEvent
+import com.example.hh_ru.utils.converters.TextConverters
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -88,6 +91,7 @@ fun FavoriteVacanciesScreen(
             .padding(horizontal = 16.dp)
 
     ) {
+        Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = stringResource(id = R.string.favorites_title),
             color = whiteTextColor,
@@ -99,7 +103,7 @@ fun FavoriteVacanciesScreen(
         Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = state.favoriteVacanciesList.size.toString() + " " +
-                    viewModel.getVacancyDeclinationByNumber(state.favoriteVacanciesList.size.toString()),
+                    TextConverters.getVacancyDeclinationByNumber(state.favoriteVacanciesList.size.toString()),
             fontFamily = sanFrancisco,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
@@ -125,11 +129,17 @@ fun FavoriteVacanciesList(
     ) {
         items(state.favoriteVacanciesList) { vacancy ->
             FavoriteVacanciesListElement(
-                state = state,
                 viewModel = viewModel,
-                vacancy = vacancy
+                vacancy = vacancy,
+                modifier = Modifier
+                    .clickable {
+                        viewModel.onEvent(FavoriteVacanciesScreenEvent.OnVacancyClick)
+                    }
             )
             Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            Spacer(modifier = Modifier.height(90.dp))
         }
     }
 }

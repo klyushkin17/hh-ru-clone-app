@@ -88,7 +88,7 @@ class BottomNavBarViewModel @Inject constructor(
 
     }
 
-    fun onBottomNavBarItemClick(index: Int) {
+    fun onBadgeCountChange() {
         val job = viewModelScope.launch(Dispatchers.IO) {
             hhRuRepository
                 .getFavoriteVacancies()

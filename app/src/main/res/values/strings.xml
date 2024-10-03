@@ -17,5 +17,7 @@
     <string name="answers_title">Отклики</string>
     <string name="messages_title">Сообщения</string>
     <string name="profile_title">Профиль</string>
+    <string name="apologize_text">Извините, на странице ведутся работы</string>
+    <string name="back_text">Назад</string>
 
 </resources>

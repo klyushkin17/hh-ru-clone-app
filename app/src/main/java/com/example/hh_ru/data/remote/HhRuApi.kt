@@ -11,13 +11,13 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface HhRuApi {
-    @GET("vacancies")
+    @GET("vacancies.json")
     suspend fun getVacancies(): VacancyListDto
 
-    @GET("offers")
+    @GET("offers.json")
     suspend fun getOffers(): OfferListDto
 
     companion object {
-        const val BASE_URL = "https://hh-ru-clone-data.onrender.com/"
+        const val BASE_URL = "https://klyushkin17.github.io/hh-api/"
     }
 }

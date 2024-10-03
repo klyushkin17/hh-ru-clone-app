@@ -1,6 +1,7 @@
 package com.example.hh_ru.presentation.main_screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,6 +49,7 @@ import com.example.hh_ru.ui.theme.topBarColor
 import com.example.hh_ru.ui.theme.whiteIconColor
 import com.example.hh_ru.ui.theme.whiteTextColor
 import com.example.hh_ru.utils.UiEvent
+import com.example.hh_ru.utils.converters.TextConverters
 
 @Composable
 fun MainScreenRoot(
@@ -85,7 +87,6 @@ fun MainScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rootColumnScrollState)
-        ,
     ) {
         Spacer(modifier = Modifier.height(16.dp))
         Column(
@@ -98,21 +99,28 @@ fun MainScreen(
                 onEvent = viewModel::onEvent,
             )
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        if (state.offerList.offerList.isNotEmpty()) {
-            OffersScrollableList(state = state)
-            Spacer(modifier = Modifier.height(32.dp))
+        if (state.screenIsLoading) {
+            ShimmerLoadingMainScreen()
         }
-        VacanciesList(
-            viewModel = viewModel,
-            state = state,
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        MoreButton(
-            viewModel = viewModel,
-            state = state,
-        )
-        Spacer(modifier = Modifier.height(95.dp))
+        else {
+            Spacer(modifier = Modifier.height(16.dp))
+            if (state.offerList.offerList.isNotEmpty()) {
+                OffersScrollableList(state = state)
+                Spacer(modifier = Modifier.height(32.dp))
+            }
+            VacanciesList(
+                viewModel = viewModel,
+                state = state,
+            )
+            if (state.vacancyList.vacancyList.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(24.dp))
+                MoreButton(
+                    viewModel = viewModel,
+                    state = state,
+                )
+                Spacer(modifier = Modifier.height(95.dp))
+            }
+        }
     }
 }
 
@@ -169,6 +177,10 @@ fun VacanciesList(
                     viewModel = viewModel,
                     vacancy = state.vacancyList.vacancyList[vacancyIndex],
                     state = state,
+                    modifier = Modifier
+                        .clickable {
+                            viewModel.onEvent(MainScreenEvent.OnVacancyClick)
+                        }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -207,7 +219,7 @@ fun MoreButton(
                 Text(
                     text = stringResource(id = R.string.more) + " " +
                             state.vacancyList.vacancyList.size.toString() + " " +
-                            viewModel.getVacancyDeclinationByNumber(state.vacancyList.vacancyList.size.toString()),
+                            TextConverters.getVacancyDeclinationByNumber(state.vacancyList.vacancyList.size.toString()),
                     color = whiteTextColor,
                     fontFamily = sanFrancisco,
                     fontSize = 16.sp,

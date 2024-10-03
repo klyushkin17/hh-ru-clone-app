@@ -9,5 +9,6 @@ data class MainScreenState(
     val vacancyList: VacancyList = VacancyList(vacancyList = emptyList()),
     val offerList: OfferList = OfferList(offerList = emptyList()),
     val searchFiledValue: String = "",
-    val favoriteVacancyIds: List<String> = emptyList()
+    val favoriteVacancyIds: List<String> = emptyList(),
+    val screenIsLoading: Boolean = false,
 )

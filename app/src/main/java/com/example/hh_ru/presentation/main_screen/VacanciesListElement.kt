@@ -37,15 +37,18 @@ import com.example.hh_ru.ui.theme.mainElementBackgroundColor
 import com.example.hh_ru.ui.theme.sanFrancisco
 import com.example.hh_ru.ui.theme.vacancyButtonColor
 import com.example.hh_ru.ui.theme.whiteTextColor
+import com.example.hh_ru.utils.converters.DataConverters
+import com.example.hh_ru.utils.converters.TextConverters
 
 @Composable
 fun VacanciesListElement(
     viewModel: MainScreenViewModel,
     vacancy: Vacancy,
     state: MainScreenState,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(color = mainElementBackgroundColor, shape = RoundedCornerShape(8.dp))
             .padding(16.dp)
@@ -63,9 +66,9 @@ fun VacanciesListElement(
                 vacancy.lookingNumber?.let {
                     Text(
                         text = stringResource(id = R.string.now_watching) + " " +
-                                viewModel.getWatchDeclinationByNumber(vacancy.lookingNumber.toString()) + " " +
+                                TextConverters.getWatchDeclinationByNumber(vacancy.lookingNumber.toString()) + " " +
                                 vacancy.lookingNumber.toString() + " " +
-                                viewModel.getPeopleDeclinationByNumber(vacancy.lookingNumber.toString()),
+                                TextConverters.getPeopleDeclinationByNumber(vacancy.lookingNumber.toString()),
                         color = greenTextColor,
                         fontFamily = sanFrancisco,
                         fontSize = 14.sp,
@@ -139,9 +142,9 @@ fun VacanciesListElement(
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        stringResource(id = R.string.posted) + " " + viewModel.formatDateString(vacancy.publishedDate)
+                        stringResource(id = R.string.posted) + " " + DataConverters.formatDateString(vacancy.publishedDate)
                     } else {
-                        stringResource(id = R.string.posted) + " " + viewModel.formatDateStringLowVersion(vacancy.publishedDate)
+                        stringResource(id = R.string.posted) + " " + DataConverters.formatDateStringLowVersion(vacancy.publishedDate)
                     },
                     color = grayTextColor,
                     fontFamily = sanFrancisco,
@@ -211,7 +214,7 @@ fun VacanciesListElement(
                     fontFamily = sanFrancisco,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal,
-                    lineHeight = 18.2.sp
+                    lineHeight = 18.2.sp,
                 )
             }
         }

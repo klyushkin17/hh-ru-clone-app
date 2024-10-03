@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -47,6 +48,7 @@ fun BottomNavBar(
 ){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    viewModel.onBadgeCountChange()
 
     NavigationBar(
         containerColor = backgroundColor
@@ -55,7 +57,7 @@ fun BottomNavBar(
             NavigationBarItem(
                 selected = viewModel.checkCurrentDestination(currentDestination?.route) == index,
                 onClick = {
-                    viewModel.onBottomNavBarItemClick(index)
+                    viewModel.onBadgeCountChange()
                     navController.navigate(bottomNavBarItem.route)
                 },
                 label = {
