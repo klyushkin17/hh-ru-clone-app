@@ -12,12 +12,21 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.example.hh_ru.presentation.bottom_navigation_bar.BottomNavBar
+import com.example.hh_ru.presentation.bottom_navigation_bar.BottomNavBarItem
+import com.example.hh_ru.presentation.bottom_navigation_bar.BottomNavBarViewModel
 import com.example.hh_ru.presentation.favorite_vacancies_screen.FavoriteVacanciesScreenRoot
 import com.example.hh_ru.presentation.main_screen.MainScreenRoot
 import com.example.hh_ru.presentation.suitable_vacancies_screen.SuitableVacanciesScreenRoot
@@ -39,39 +48,49 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     Scaffold(
+                        bottomBar = {
+                            BottomNavBar(navController = navController)
+                        },
                         containerColor = backgroundColor
                     ) {
                         NavHost(
                             navController = navController,
-                            startDestination = Routes.MAIN_SCREEN
+                            startDestination = "main_graph"
                         ) {
-                            composable(route = Routes.MAIN_SCREEN) {
-                                MainScreenRoot(
-                                    onNavigate = {
-                                        navController.navigate(it.route)
-                                    }
-                                )
-                            }
 
-                            composable(route = Routes.SUITABLE_VACANCIES_SCREEN) {
-                                SuitableVacanciesScreenRoot(
-                                    onNavigate = {
-                                        navController.navigate(it.route)
-                                    },
-                                    onNavigateUp = {
-                                        navController.navigateUp()
-                                    }
-                                )
-                            }
-                            composable(route = Routes.FAVORITE_VACANCIES_SCREEN) {
-                                FavoriteVacanciesScreenRoot(
-                                    onNavigate = {
-                                        navController.navigate(it.route)
-                                    },
-                                    onNavigateUp = {
-                                        navController.navigateUp()
-                                    }
-                                )
+                            navigation(
+                                startDestination = Routes.MAIN_SCREEN,
+                                route = "main_graph"
+                            ) {
+                                composable(route = Routes.MAIN_SCREEN) {
+
+                                    MainScreenRoot(
+                                        onNavigate = {
+                                            navController.navigate(it.route)
+                                        },
+                                    )
+                                }
+
+                                composable(route = Routes.SUITABLE_VACANCIES_SCREEN) {
+                                    SuitableVacanciesScreenRoot(
+                                        onNavigate = {
+                                            navController.navigate(it.route)
+                                        },
+                                        onNavigateUp = {
+                                            navController.navigateUp()
+                                        }
+                                    )
+                                }
+                                composable(route = Routes.FAVORITE_VACANCIES_SCREEN) {
+                                    FavoriteVacanciesScreenRoot(
+                                        onNavigate = {
+                                            navController.navigate(it.route)
+                                        },
+                                        onNavigateUp = {
+                                            navController.navigateUp()
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
@@ -79,4 +98,14 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+@Composable
+inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(
+    navController: NavController,
+): T {
+    val navGraphRoute = destination.parent?.route ?: return viewModel()
+    val parentEntry = remember(this) {
+        navController.getBackStackEntry(navGraphRoute)
+    }
+    return viewModel(parentEntry)
 }

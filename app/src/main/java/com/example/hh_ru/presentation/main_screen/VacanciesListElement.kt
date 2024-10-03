@@ -25,8 +25,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hh_ru.R
 import com.example.hh_ru.domain.model.Vacancy
+import com.example.hh_ru.presentation.bottom_navigation_bar.BottomNavBarViewModel
 import com.example.hh_ru.ui.theme.filledLikeIconColor
 import com.example.hh_ru.ui.theme.grayIconColor
 import com.example.hh_ru.ui.theme.grayTextColor
@@ -40,7 +42,7 @@ import com.example.hh_ru.ui.theme.whiteTextColor
 fun VacanciesListElement(
     viewModel: MainScreenViewModel,
     vacancy: Vacancy,
-    state: MainScreenState
+    state: MainScreenState,
 ) {
     Column(
         modifier = Modifier
@@ -155,7 +157,12 @@ fun VacanciesListElement(
                     modifier = Modifier
                         .height(24.dp)
                         .clickable {
-                            viewModel.onEvent(MainScreenEvent.OnLikeIconClick(vacancy, isFavorite = false))
+                            viewModel.onEvent(
+                                MainScreenEvent.OnLikeIconClick(
+                                    vacancy,
+                                    isFavorite = false
+                                )
+                            )
                         },
                     painter = painterResource(id = R.drawable.filled_like_icon),
                     contentDescription = "filled_like_icon",
@@ -166,7 +173,13 @@ fun VacanciesListElement(
                     modifier = Modifier
                         .height(24.dp)
                         .clickable {
-                            viewModel.onEvent(MainScreenEvent.OnLikeIconClick(vacancy, isFavorite = true))
+                            viewModel.onEvent(
+                                MainScreenEvent.OnLikeIconClick(
+                                    vacancy,
+                                    isFavorite = true
+                                )
+                            )
+
                         },
                     painter = painterResource(id = R.drawable.empty_liked_icon),
                     contentDescription = "empty_like_icon",

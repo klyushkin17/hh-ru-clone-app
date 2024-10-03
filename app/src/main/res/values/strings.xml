@@ -13,4 +13,9 @@
     <string name="sort_text">По соответствию</string>
     <string name="map_button_text">Карта</string>
     <string name="favorites_title">Избранное</string>
+    <string name="search_title">Поиск</string>
+    <string name="answers_title">Отклики</string>
+    <string name="messages_title">Сообщения</string>
+    <string name="profile_title">Профиль</string>
+
 </resources>

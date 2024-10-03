@@ -89,14 +89,14 @@ fun SuitableVacanciesScreenRoot(
         floatingActionButton = {
             FloatingActionButton(
                 modifier = Modifier
-                    .width(99.dp)
-                    .height(48.dp),
+                    .padding(bottom = 80.dp),
                 onClick = { /*TODO*/ },
                 containerColor = scaffoldBackgroundColor,
                 shape = RoundedCornerShape(50.dp)
             ) {
                 Row(
-                    Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .padding(horizontal = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
@@ -171,6 +171,9 @@ fun VacanciesList(
                 state = state
             )
             Spacer(modifier = Modifier.height(8.dp))
+        }
+        item { 
+            Spacer(modifier = Modifier.height(90.dp))
         }
     }
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hh_ru.data.mapper.toFavoriteVacancyEntity
 import com.example.hh_ru.data.mapper.toListOfFavoriteVacancy
 import com.example.hh_ru.domain.repository.HhRuRepository
+import com.example.hh_ru.presentation.bottom_navigation_bar.BottomNavBarViewModel
 import com.example.hh_ru.utils.Resource
 import com.example.hh_ru.utils.Routes
 import com.example.hh_ru.utils.UiEvent

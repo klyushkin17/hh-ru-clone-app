@@ -37,7 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.unpackInt1
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hh_ru.R
+import com.example.hh_ru.presentation.bottom_navigation_bar.BottomNavBarViewModel
 import com.example.hh_ru.ui.theme.findIconColor
 import com.example.hh_ru.ui.theme.moreButtonColor
 import com.example.hh_ru.ui.theme.placeholderTextColor
@@ -50,7 +52,7 @@ import com.example.hh_ru.utils.UiEvent
 @Composable
 fun MainScreenRoot(
     onNavigate: (UiEvent.Navigate) -> Unit,
-    viewModel: MainScreenViewModel = hiltViewModel()
+    viewModel: MainScreenViewModel = hiltViewModel(),
 ){
     val state by viewModel.state.collectAsState()
 
@@ -103,13 +105,14 @@ fun MainScreen(
         }
         VacanciesList(
             viewModel = viewModel,
-            state = state
+            state = state,
         )
         Spacer(modifier = Modifier.height(24.dp))
         MoreButton(
             viewModel = viewModel,
             state = state,
         )
+        Spacer(modifier = Modifier.height(95.dp))
     }
 }
 
@@ -144,7 +147,7 @@ fun OffersScrollableList(
 @Composable
 fun VacanciesList(
     viewModel: MainScreenViewModel,
-    state: MainScreenState
+    state: MainScreenState,
 ){
     Column(
         modifier = Modifier
@@ -165,7 +168,7 @@ fun VacanciesList(
                 VacanciesListElement(
                     viewModel = viewModel,
                     vacancy = state.vacancyList.vacancyList[vacancyIndex],
-                    state = state
+                    state = state,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
